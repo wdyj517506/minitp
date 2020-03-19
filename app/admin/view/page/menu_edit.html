@@ -15,11 +15,11 @@
     <div class="layuimini-main">
 
         <blockquote class="layui-elem-quote layui-text layui-btn layui-btn-danger">
-            此处可添加菜单栏目，非系统管理人员请谨慎操作！
+            此处可修改菜单栏目，非系统管理人员请谨慎操作！
         </blockquote>
 
         <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
-            <legend>添加菜单</legend>
+            <legend>修改菜单</legend>
         </fieldset>
 
         <form class="layui-form" action="">
@@ -27,26 +27,26 @@
             <div class="layui-form-item">
                 <label class="layui-form-label">菜单名称</label>
                 <div class="layui-input-inline">
-                    <input type="text" lay-verify="required" name="authorityName" lay-verify="title" autocomplete="off" placeholder="菜单名称" class="layui-input">
+                    <input type="text" lay-verify="required" name="authorityName" lay-verify="title" autocomplete="off" placeholder="菜单名称" class="layui-input" value="{$detail.authorityName}">
                 </div>
             </div>
             <div class="layui-form-item">
                 <label class="layui-form-label">菜单排序</label>
                 <div class="layui-input-inline">
-                    <input type="text" name="orderNumber" lay-reqtext="菜单排序" placeholder="菜单排序" autocomplete="off" value="50" class="layui-input">
+                    <input type="text" name="orderNumber" lay-reqtext="菜单排序" placeholder="菜单排序" autocomplete="off" value="{$detail.orderNumber}" class="layui-input">
                 </div>
             </div>
             <div class="layui-form-item">
                 <label class="layui-form-label">菜单地址</label>
                 <div class="layui-input-inline">
-                    <input type="text" lay-verify="required" name="menuUrl" lay-verify="required" lay-reqtext="菜单地址" placeholder="菜单地址" autocomplete="off" class="layui-input">
+                    <input type="text" lay-verify="required" name="menuUrl" lay-verify="required" lay-reqtext="菜单地址" placeholder="菜单地址" autocomplete="off" class="layui-input" value="{$detail.menuUrl}">
                 </div>
                 <div class="layui-form-mid layui-word-aux">请自定义菜单地址</div>
             </div>
             <div class="layui-form-item">
                 <label for="" class="layui-form-label">菜单图标</label>
                 <div class="layui-input-block">
-                    <input type="text" name="menuIcon" id="iconPicker" value="fa-adjust" lay-filter="iconPicker" class="hide">
+                    <input type="text" name="menuIcon" id="iconPicker" value="{$detail.menuIcon}" lay-filter="iconPicker" class="hide">
                 </div>
             </div>
             <div class="layui-form-item">
@@ -55,11 +55,11 @@
                     <div class="layui-input-inline">
                         <select name="authority" lay-verify="required">
                             <option value="">请选择权限</option>
-                                <option value="view">查看</option>
-                                <option value="add">添加</option>
-                                <option value="edit">修改</option>
-                                <option value="delete">删除</option>
-                                <option value="auth">其它</option>
+                            <option value="view">查看</option>
+                            <option value="add">添加</option>
+                            <option value="edit">修改</option>
+                            <option value="delete">删除</option>
+                            <option value="auth">其它</option>
                         </select>
                     </div>
                 </div>

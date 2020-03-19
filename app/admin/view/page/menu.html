@@ -97,7 +97,14 @@
             if (layEvent === 'del') {
                 layer.msg('删除' + data.id);
             } else if (layEvent === 'edit') {
-                layer.msg('修改' + data.id);
+                var id = data.id;
+                layer.open({
+                    type:2
+                    ,title: "提示信息"
+                    ,content: 'menu-edit?id='+id
+                    ,offset:'100px'
+                    ,area: ['690px', '650px']
+                });
             }
         });
     });

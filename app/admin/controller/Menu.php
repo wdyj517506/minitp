@@ -9,11 +9,29 @@ namespace app\admin\controller;
 
 
 use app\BaseController;
+use think\exception\ValidateException;
 use think\facade\Db;
 use app\common\model\mysql\System;
+use think\Request;
+use think\validate\Menu as MenuValidate;
 
 class Menu extends BaseController
 {
+    /**
+     * @var \think\Request Request实例
+     */
+    protected $request;
+
+    /**
+     * 构造方法
+     * @param Request $request Request对象
+     * @access public
+     */
+    public function __construct(Request $request)
+    {
+        $this->request = $request;
+    }
+
     /**获取初始化数据
      * @return \think\response\Json
      * @throws \think\db\exception\DataNotFoundException
@@ -77,6 +95,12 @@ class Menu extends BaseController
         return $treeList;
     }
 
+    /**
+     * @return \think\response\Json
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\DbException
+     * @throws \think\db\exception\ModelNotFoundException
+     */
     public function menus()
     {
         $menusData = new System();
@@ -84,5 +108,68 @@ class Menu extends BaseController
         //halt($list);
         $count = count($list);
         return show(config("status.success"),"调用成功", $count, $list);
+    }
+
+    /**
+     * @return \think\response\Json
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\DbException
+     * @throws \think\db\exception\ModelNotFoundException
+     */
+    public function menus_old()
+    {
+        $list = $this->request->param('list');
+        $menusData = new System();
+        $list = $menusData->selectFirstDataBySystem($list);
+        return show(config("status.success"),"调用成功", '', $list);
+    }
+
+    /**
+     * @return \think\response\Json
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\DbException
+     * @throws \think\db\exception\ModelNotFoundException
+     */
+    public function menus_add()
+    {
+        $list = $this->request->param();
+        $addData = new System();
+        switch ($list['isMenu'])
+        {
+            case -1:
+                $list['parentId'] = '';
+                break;
+            case 0:
+                $list['parentId'] = $list['parentId1'];
+                break;
+            case 1:
+                $list['parentId'] = $list['parentId2'];
+                break;
+        }
+        $authority = $addData->selectDataByOne($list['parentId']);
+        $parentUrl = $authority['menuUrl'].":".$list['authority'];
+        try{
+            $data = [
+                'authorityName' => $list['authorityName'],
+                'orderNumber' => $list['orderNumber'],
+                'menuUrl' => $list['menuUrl'],
+                'menuIcon' => $list['menuIcon'],
+                'authority' => $parentUrl,
+                'isMenu' => $list['isMenu'],
+                '__token__' => $list['__token__']
+            ];
+            $validate = new \app\admin\validate\Menu();
+            if (!$validate->check($data)) {
+                return show(config("status.error"),$validate->getError());
+            }
+            $backData = $addData->addDataSystem($list);
+            if(!empty($backData)){
+                return show(config("status.success"),"添加成功",'',$authority);
+            }
+            return show(config("status.error"),"添加失败");
+        } catch (ValidateException $e) {
+            return show(config("status.error"),"内部错误");
+        }
+
     }
 }
